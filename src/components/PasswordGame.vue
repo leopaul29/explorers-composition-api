@@ -33,9 +33,14 @@ export default {
     }
   },
   methods: {
-    /**
-     * Todo: Check password is broken!
-     */
+    checkPassword() {
+      if (this.passwordInput === this.correctPassword) {
+        this.status === PASSWORD_STATUS.PASS
+        this.$emit('mini-game-won', 'password-game')
+      } else {
+        this.status === PASSWORD_STATUS.FAIL
+      }
+    },
     generateNewPassword() {
       return Math.floor(Math.random() * 1000000 + 1000).toString()
     }
