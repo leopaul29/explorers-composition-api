@@ -1,58 +1,66 @@
 <script>
+import { watch, onMounted, computed, reactive, toRefs } from 'vue'
 import { PASSWORD_STATUS } from '../constants'
 
 export default {
-  data() {
-    return {
+  setup(props, context) {
+    const state = reactive({
       status: 'In Progress',
       passwordInput: '',
-      correctPassword: 0
-    }
-  },
-  computed: {
-    gameStatus() {
-      if (this.status === PASSWORD_STATUS.FAIL) {
-        return {
-          styles: 'is-red',
-          text: 'Access Denied'
+      correctPassword: 0,
+      gameStatus: computed(() => {
+        if (state.status === PASSWORD_STATUS.FAIL) {
+          return {
+            styles: 'is-red',
+            text: 'Access Denied'
+          }
+        } else if (state.status === PASSWORD_STATUS.PASS) {
+          return {
+            styles: 'is-green',
+            text: 'Access Granted'
+          }
+        } else {
+          return {
+            styles: '',
+            text: 'Locked'
+          }
         }
-      } else if (this.status === PASSWORD_STATUS.PASS) {
-        return {
-          styles: 'is-green',
-          text: 'Access Granted'
-        }
+      }),
+      userWins: computed(() => {
+        return state.status === PASSWORD_STATUS.PASS
+      })
+    })
+
+    const checkPassword = () => {
+      if (state.correctPassword === state.passwordInput) {
+        state.status = PASSWORD_STATUS.PASS
+        context.emit('mini-game-won', 'password-game')
       } else {
-        return {
-          styles: '',
-          text: 'Locked'
-        }
+        state.status = PASSWORD_STATUS.FAIL
       }
-    },
-    userWins() {
-      return this.status === PASSWORD_STATUS.PASS
     }
-  },
-  methods: {
-    checkPassword() {
-      if (this.passwordInput === this.correctPassword) {
-        this.status === PASSWORD_STATUS.PASS
-        this.$emit('mini-game-won', 'password-game')
-      } else {
-        this.status === PASSWORD_STATUS.FAIL
-      }
-    },
-    generateNewPassword() {
+
+    const generateNewPassword = () => {
       return Math.floor(Math.random() * 1000000 + 1000).toString()
     }
-  },
-  mounted() {
-    this.correctPassword = this.generateNewPassword()
-  },
-  watch: {
-    status(gameState) {
-      if (gameState === PASSWORD_STATUS.FAIL) {
-        this.correctPassword = this.generateNewPassword()
+
+    onMounted(() => {
+      state.correctPassword = generateNewPassword()
+    })
+
+    watch(
+      () => state.status,
+      gameState => {
+        if (gameState === PASSWORD_STATUS.FAIL) {
+          state.correctPassword = generateNewPassword()
+        }
       }
+    )
+
+    return {
+      ...toRefs(state),
+      checkPassword,
+      generateNewPassword
     }
   }
 }
