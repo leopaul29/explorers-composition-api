@@ -36,3 +36,11 @@ yarn build
 - [Watch: Begin](https://github.com/netlify/explorers-composition-api/tree/watch-begin)
 - [Watch: Challenge](https://github.com/netlify/explorers-composition-api/tree/watch-challenge)
 - [Meteor Crisis Challenge](https://github.com/netlify/explorers-composition-api/tree/meteor-crisis-challenge)
+
+## 🏆 Challenge
+
+The last part of the mission is to complete a challenge by fixing the [Meteor Crisis Challenge](https://github.com/netlify/explorers-composition-api/tree/meteor-crisis-challenge) branch and make it a composition API.
+
+I created a new branch [Meteor Crisis Solution](https://github.com/leopaul29/explorers-composition-api/tree/meteor-crisis-solution) to implement my solution then merge my changes on the main branch.
+
+You can find my alive solution [here](https://goofy-babbage-a60ee3.netlify.app/)
